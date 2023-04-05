@@ -6,7 +6,7 @@ using UnityEngine;
 public class NetcodeManager : NetworkBehaviour
 {
     [SerializeField] List<Player> players;
-    [SerializeField] List<PlayerPosData> playerPosRPCData;
+    [SerializeField] List<PlayerPosData> playerPosRPCData = new List<PlayerPosData>();
 
     [SerializeField] GameObject playerPrefab;
 
@@ -95,7 +95,15 @@ public class NetcodeManager : NetworkBehaviour
     Vector2 GetJoyStickInput()
     {
         Vector2 input = Vector2.zero;
+        input.x = Input.GetAxis("Horizontal");
+        input.y = Input.GetAxis("Vertical");
         return input;
+    }
+
+    public void UpdateTickrates(int server, int client)
+    {
+        ServerTickRate.Value = server;
+        ClientInputTickRate.Value = client;
     }
 }
 

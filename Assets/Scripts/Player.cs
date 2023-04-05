@@ -27,7 +27,6 @@ public class Player : NetworkBehaviour
         PredictMovement();
     }
 
-
     public void SetNewClientPosition(Vector2 pos)
     {
         oldPos2 = transform.position;
