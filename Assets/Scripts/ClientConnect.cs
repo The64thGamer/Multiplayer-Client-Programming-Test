@@ -20,7 +20,6 @@ public class ClientConnect : NetworkBehaviour
         NetcodeManager netcodeManager = GameObject.Find("Game Manager").GetComponent<NetcodeManager>();
         while(!netcodeManager.GetServerStatus())
         {
-            Debug.Log("checking");
             yield return null;
         }
         if (!IsHost) { Destroy(this.gameObject); }
