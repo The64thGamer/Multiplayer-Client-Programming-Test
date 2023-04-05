@@ -45,11 +45,15 @@ public class NetcodeManager : NetworkBehaviour
 
     private void Update()
     {
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         if (!IsHost && tickTimer > 1.0f / (float)ClientInputTickRate.Value)
         {
             tickTimer = 0;
             SendJoystickServerRpc(GetJoyStickInput(), NetworkManager.Singleton.LocalClientId);
-            Debug.Log("Sent Client");
             return;
         }
         else if (IsHost && tickTimer > 1.0f / (float)ServerTickRate.Value)
@@ -65,15 +69,15 @@ public class NetcodeManager : NetworkBehaviour
             }
             SendPosClientRpc(playerPosRPCData.ToArray());
             SendJoystickServerRpc(GetJoyStickInput(), NetworkManager.Singleton.LocalClientId);
-            Debug.Log("Sent Server");
             return;
         }
         tickTimer += Time.deltaTime;
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void SendJoystickServerRpc(Vector2 joystick, ulong id)
     {
+        Debug.Log("Recieved " + id);
         for (int i = 0; i < players.Count; i++)
         {
             if (players[i].OwnerClientId == id)
