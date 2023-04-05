@@ -4,8 +4,8 @@
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; flex-wrap: nowrap; justify-content: center;">
             <ui:Label tabindex="-1" text="Multiplayer-Client-Programming-Test" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; color: rgb(255, 255, 255);" />
             <ui:Button text="Start as Host" display-tooltip-when-elided="true" name="StartHost" />
-            <ui:SliderInt picking-mode="Ignore" label="Server Tickrate" value="10" high-value="128" show-input-field="true" low-value="1" name="ServerTickrate" />
-            <ui:SliderInt picking-mode="Ignore" label="Client Input Tickrate" value="10" high-value="128" show-input-field="true" low-value="1" name="ClientTickrate" />
+            <ui:SliderInt picking-mode="Ignore" label="Server Tickrate" value="30" high-value="128" show-input-field="true" low-value="1" name="ServerTickrate" />
+            <ui:SliderInt picking-mode="Ignore" label="Client Input Tickrate" value="30" high-value="128" show-input-field="true" low-value="1" name="ClientTickrate" />
             <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 0; max-height: 30px;" />
             <ui:Button text="Start as Client" display-tooltip-when-elided="true" name="StartClient" />
         </ui:VisualElement>

@@ -10,8 +10,8 @@ public class Player : NetworkBehaviour
     [SerializeField] Vector3 oldPos;
     [SerializeField] Vector3 velocity;
     const float maxSpeed = 3;
-    const float deceleration = 5;
-    const float acceleration = 10;
+    const float deceleration = 10;
+    const float acceleration = 20;
 
     public override void OnNetworkSpawn()
     {
@@ -35,7 +35,7 @@ public class Player : NetworkBehaviour
             Vector3 dir = pos - oldPos;
             if (dir.magnitude > 0.1f)
             {
-                currentJoystick = dir.normalized;
+                currentJoystick = dir * maxSpeed;
             }
             else
             {
