@@ -12,6 +12,6 @@ public class ClientConnect : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsHost) { Destroy(this.gameObject); }
-        GameObject.Find("Game Manager").GetComponent<NetcodeManager>().SpawnNewClient(OwnerClientId);
+        GameObject.Find("Game Manager").GetComponent<NetcodeManager>().SpawnNewPlayerHost(OwnerClientId);
     }
 }
