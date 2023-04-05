@@ -57,7 +57,18 @@ public class Player : NetworkBehaviour
 
     void MovePlayer()
     {
-        velocity -= Vector3.one * Time.deltaTime;
+        float xVel = Mathf.Sign(velocity.x);
+        float yVel = Mathf.Sign(velocity.x);
+        velocity.x += 0.1f * Time.deltaTime * -xVel;
+        if(Mathf.Sign(velocity.x) != xVel)
+        {
+            velocity.x = 0;
+        }
+        velocity.y += 0.1f * Time.deltaTime * -yVel;
+        if (Mathf.Sign(velocity.y) != yVel)
+        {
+            velocity.y = 0;
+        }
         velocity += currentJoystick * Time.deltaTime;
         transform.position += velocity;
     }
