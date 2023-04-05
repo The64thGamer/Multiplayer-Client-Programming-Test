@@ -22,7 +22,9 @@ public class NetcodeManager : NetworkBehaviour
 
     public void AssignNewPlayerClient(Player player)
     {
+        //Player lists are always sorted by ID to prevent searching in RPC
         players.Add(player);
+        players.Sort((p1, p2) => p1.OwnerClientId.CompareTo(p2.OwnerClientId));
     }
 
     private void Update()
@@ -53,6 +55,23 @@ public class NetcodeManager : NetworkBehaviour
             }
         }
     }
+    /// <summary>
+    /// Client Data needs to be sorted by ID
+    /// </summary>
+    /// <param name="data"></param>
+    [ClientRpc]
+    private void SendPosClientRpc(PlayerPosData[] data)
+    {
+        if(data.Length != players.Count) { return; }
+        for (int i = 0; i < players.Count; i++)
+        {
+            //Check run incase of player disconnect+reconnect inside same tick.
+            if (players[i].OwnerClientId == data[i].id)
+            {
+                players[i].SetNewClientPosition(data[i].pos);
+            }
+        }
+    }
 
     Vector2 GetJoyStickInput()
     {
@@ -63,8 +82,8 @@ public class NetcodeManager : NetworkBehaviour
 
 public struct PlayerPosData : INetworkSerializable
 {
-    ulong id;
-    Vector2 pos;
+    public ulong id;
+    public Vector2 pos;
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
