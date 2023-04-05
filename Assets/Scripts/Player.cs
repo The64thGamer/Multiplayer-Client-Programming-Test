@@ -6,8 +6,10 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
-    [SerializeField] Vector3 oldPos1, oldPos2;
+    [SerializeField] Vector2 oldPos1, oldPos2;
     [SerializeField] float predictionTimer;
+    [SerializeField] Vector3 currentJoystick;
+    [SerializeField] Vector3 velocity;
 
     public override void OnNetworkSpawn()
     {
@@ -16,10 +18,15 @@ public class Player : NetworkBehaviour
 
     void Update()
     {
+        if (IsOwner)
+        {
+            MovePlayer();
+            return;
+        }
         PredictMovement();
     }
 
-    public void SetNewClientPosition(Vector3 pos)
+    public void SetNewClientPosition(Vector2 pos)
     {
         oldPos2 = transform.position;
         oldPos1 = pos;
@@ -36,5 +43,17 @@ public class Player : NetworkBehaviour
         {
             predictionTimer = Mathf.Max(0, predictionTimer - (Time.deltaTime * predictionTimer));
         }
+    }
+
+    void MovePlayer()
+    {
+        velocity -= Vector3.one * Time.deltaTime;
+        velocity += currentJoystick * Time.deltaTime;
+        transform.position += velocity;
+    }
+
+    public void UpdateJoystick(Vector2 joystick)
+    {
+        currentJoystick = joystick.normalized;
     }
 }
