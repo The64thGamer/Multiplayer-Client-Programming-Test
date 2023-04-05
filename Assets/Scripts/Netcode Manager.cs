@@ -8,7 +8,9 @@ public class NetcodeManager : NetworkBehaviour
     [SerializeField] List<Player> players;
     [SerializeField] GameObject playerPrefab;
 
-    [SerializeField] int tickRate = 10;
+    [SerializeField] NetworkVariable<int> ServerTickRate = new NetworkVariable<int>(10);
+    [SerializeField] NetworkVariable<int> ClientInputTickRate = new NetworkVariable<int>(10);
+
     float tickTimer;
 
     public void SpawnNewPlayerHost(ulong id)
@@ -26,7 +28,7 @@ public class NetcodeManager : NetworkBehaviour
     private void Update()
     {
         if (!IsHost) { return; }
-        if (tickTimer > 1 / tickRate)
+        if (tickTimer > 1.0f / (float)ServerTickRate.Value)
         {
             tickTimer = 0;
         }
