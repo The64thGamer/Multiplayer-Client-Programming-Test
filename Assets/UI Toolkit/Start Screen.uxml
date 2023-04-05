@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; flex-wrap: nowrap; justify-content: center;">
+            <ui:Label tabindex="-1" text="Multiplayer-Client-Programming-Test" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; color: rgb(255, 255, 255);" />
+            <ui:Button text="Start as Host" display-tooltip-when-elided="true" />
+            <ui:Slider picking-mode="Ignore" label="Server Tickrate" value="10" high-value="128" low-value="1" show-input-field="true" />
+            <ui:Slider picking-mode="Ignore" label="Client Input Tickrate" value="10" high-value="128" low-value="1" show-input-field="true" />
+            <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 0; max-height: 30px;" />
+            <ui:Button text="Start as Client" display-tooltip-when-elided="true" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+    </ui:VisualElement>
+</ui:UXML>

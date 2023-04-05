@@ -6,6 +6,8 @@ using UnityEngine;
 public class NetcodeManager : NetworkBehaviour
 {
     [SerializeField] List<Player> players;
+    [SerializeField] List<PlayerPosData> playerPosRPCData;
+
     [SerializeField] GameObject playerPrefab;
 
     [SerializeField] NetworkVariable<int> ServerTickRate = new NetworkVariable<int>(10);
@@ -25,6 +27,13 @@ public class NetcodeManager : NetworkBehaviour
         //Player lists are always sorted by ID to prevent searching in RPC
         players.Add(player);
         players.Sort((p1, p2) => p1.OwnerClientId.CompareTo(p2.OwnerClientId));
+        playerPosRPCData.Add(
+            new PlayerPosData()
+            {
+                id = player.OwnerClientId,
+                pos = player.transform.position
+            });
+        playerPosRPCData.Sort((p1, p2) => p1.id.CompareTo(p2.id));
     }
 
     private void Update()
@@ -38,6 +47,15 @@ public class NetcodeManager : NetworkBehaviour
         else if (IsHost && tickTimer > 1.0f / (float)ServerTickRate.Value)
         {
             tickTimer = 0;
+            for (int i = 0; i < playerPosRPCData.Count; i++)
+            {
+                playerPosRPCData[i] = new PlayerPosData()
+                {
+                    id = playerPosRPCData[i].id,
+                    pos = players[i].transform.position
+                };
+            }
+            SendPosClientRpc(playerPosRPCData.ToArray());
             return;
         }
         tickTimer += Time.deltaTime;
@@ -55,6 +73,7 @@ public class NetcodeManager : NetworkBehaviour
             }
         }
     }
+
     /// <summary>
     /// Client Data needs to be sorted by ID
     /// </summary>
@@ -62,7 +81,7 @@ public class NetcodeManager : NetworkBehaviour
     [ClientRpc]
     private void SendPosClientRpc(PlayerPosData[] data)
     {
-        if(data.Length != players.Count) { return; }
+        if (data.Length != players.Count) { return; }
         for (int i = 0; i < players.Count; i++)
         {
             //Check run incase of player disconnect+reconnect inside same tick.
@@ -83,7 +102,7 @@ public class NetcodeManager : NetworkBehaviour
 public struct PlayerPosData : INetworkSerializable
 {
     public ulong id;
-    public Vector2 pos;
+    public Vector3 pos;
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
