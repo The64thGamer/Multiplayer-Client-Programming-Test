@@ -27,21 +27,37 @@ public class NetcodeManager : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsHost) { return; }
-        if (tickTimer > 1.0f / (float)ServerTickRate.Value)
+        if (!IsHost && tickTimer > 1.0f / (float)ClientInputTickRate.Value)
         {
             tickTimer = 0;
+            SendJoystickServerRpc(GetJoyStickInput(), NetworkManager.Singleton.LocalClientId);
+            return;
         }
-        else
+        else if (IsHost && tickTimer > 1.0f / (float)ServerTickRate.Value)
         {
-            tickTimer += Time.deltaTime;
+            tickTimer = 0;
+            return;
         }
+        tickTimer += Time.deltaTime;
     }
 
     [ServerRpc]
-    private void SendPosServerRpc()
+    private void SendJoystickServerRpc(Vector2 joystick, ulong id)
     {
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i].OwnerClientId == id)
+            {
+                players[i].UpdateJoystick(joystick);
+                return;
+            }
+        }
+    }
 
+    Vector2 GetJoyStickInput()
+    {
+        Vector2 input = Vector2.zero;
+        return input;
     }
 }
 
