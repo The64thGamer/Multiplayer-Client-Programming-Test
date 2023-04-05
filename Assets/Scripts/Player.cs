@@ -27,7 +27,7 @@ public class Player : NetworkBehaviour
         PredictMovement();
     }
 
-    public void SetNewClientPosition(Vector2 pos)
+    public void SetNewClientPosition(Vector3 pos)
     {
         oldPos2 = transform.position;
         oldTime2 = oldTime1;
@@ -35,6 +35,7 @@ public class Player : NetworkBehaviour
         oldTime1 = Time.time;
         predictionTimer = 1;
         timeBetweenUpdates =  oldTime1 - oldTime2;
+        transform.position = pos;
     }
 
     /// <summary>

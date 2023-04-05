@@ -6,12 +6,25 @@ using UnityEngine;
 
 public class ClientConnect : NetworkBehaviour
 {
+
     /// <summary>
     /// Transfers client info from Unity Netcode object spawned on Connect.
     /// </summary>
     public override void OnNetworkSpawn()
     {
+        StartCoroutine(ServerStartCheck());
+    }
+
+    IEnumerator ServerStartCheck()
+    {
+        NetcodeManager netcodeManager = GameObject.Find("Game Manager").GetComponent<NetcodeManager>();
+        while(!netcodeManager.GetServerStatus())
+        {
+            Debug.Log("checking");
+            yield return null;
+        }
         if (!IsHost) { Destroy(this.gameObject); }
-        GameObject.Find("Game Manager").GetComponent<NetcodeManager>().SpawnNewPlayerHost(OwnerClientId);
+        netcodeManager.SpawnNewPlayerHost(OwnerClientId);
+        Destroy(this.gameObject);
     }
 }

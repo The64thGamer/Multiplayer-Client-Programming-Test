@@ -14,10 +14,17 @@ public class NetcodeManager : NetworkBehaviour
     [SerializeField] NetworkVariable<int> ClientInputTickRate = new NetworkVariable<int>(10);
 
     float tickTimer;
+    bool serverStarted;
+
+    private void Start()
+    {
+        NetworkManager.Singleton.OnServerStarted += ServerStarted;
+    }
 
     public void SpawnNewPlayerHost(ulong id)
     {
         if (!IsHost) { return; }
+
         GameObject thePlayer = GameObject.Instantiate(playerPrefab);
         thePlayer.GetComponent<NetworkObject>().SpawnWithOwnership(id);
     }
@@ -104,6 +111,16 @@ public class NetcodeManager : NetworkBehaviour
     {
         ServerTickRate.Value = server;
         ClientInputTickRate.Value = client;
+    }
+
+    void ServerStarted()
+    {
+        serverStarted = true;
+    }
+
+    public bool GetServerStatus()
+    {
+        return serverStarted;
     }
 }
 
