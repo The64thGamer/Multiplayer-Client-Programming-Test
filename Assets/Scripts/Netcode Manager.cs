@@ -77,7 +77,6 @@ public class NetcodeManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SendJoystickServerRpc(Vector2 joystick, ulong id)
     {
-        Debug.Log("Recieved " + id);
         for (int i = 0; i < players.Count; i++)
         {
             if (players[i].OwnerClientId == id)

@@ -7,7 +7,11 @@ using UnityEngine;
 public class Player : NetworkBehaviour
 {
     [SerializeField] Vector3 currentJoystick;
+    [SerializeField] Vector3 oldPos;
     [SerializeField] Vector3 velocity;
+    const float maxSpeed = 3;
+    const float deceleration = 5;
+    const float acceleration = 10;
 
     public override void OnNetworkSpawn()
     {
@@ -19,39 +23,51 @@ public class Player : NetworkBehaviour
         if (IsOwner)
         {
             UpdateJoystick(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
-            return;
         }
         MovePlayer();
     }
 
     public void SetNewClientPosition(Vector3 pos)
     {
+        if(!IsOwner && !IsHost)
+        {
+            //Clientside prediction
+            Vector3 dir = pos - oldPos;
+            if (dir.magnitude > 0.1f)
+            {
+                currentJoystick = dir.normalized;
+            }
+            else
+            {
+                currentJoystick = Vector3.zero;
+            }
+        }
         transform.position = pos;
+        oldPos = pos;
     }
-
 
     void MovePlayer()
     {
         //Deceleration
         float xVel = Mathf.Sign(velocity.x);
-        float yVel = Mathf.Sign(velocity.x);
-        velocity.x += 0.1f * Time.deltaTime * -xVel;
+        float yVel = Mathf.Sign(velocity.y);
+        velocity.x += deceleration * Time.deltaTime * -xVel;
         if(Mathf.Sign(velocity.x) != xVel)
         {
             velocity.x = 0;
         }
-        velocity.y += 0.1f * Time.deltaTime * -yVel;
+        velocity.y += deceleration * Time.deltaTime * -yVel;
         if (Mathf.Sign(velocity.y) != yVel)
         {
             velocity.y = 0;
         }
         //Move
-        velocity += currentJoystick * Time.deltaTime;
+        velocity += currentJoystick * acceleration * Time.deltaTime;
         //Max Speed
-        velocity = Vector3.Min(velocity, Vector3.one * .01f);
-        velocity = Vector3.Max(velocity, -Vector3.one * .01f);
+        velocity = Vector3.Min(velocity, Vector3.one * maxSpeed);
+        velocity = Vector3.Max(velocity, -Vector3.one * maxSpeed);
 
-        transform.position += velocity;
+        transform.position += velocity * Time.deltaTime;
     }
 
     public void UpdateJoystick(Vector2 joystick)
