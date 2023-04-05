@@ -21,6 +21,7 @@ public class Player : NetworkBehaviour
     {
         if (IsOwner)
         {
+            UpdateJoystick(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
             MovePlayer();
             return;
         }
@@ -57,6 +58,7 @@ public class Player : NetworkBehaviour
 
     void MovePlayer()
     {
+        //Deceleration
         float xVel = Mathf.Sign(velocity.x);
         float yVel = Mathf.Sign(velocity.x);
         velocity.x += 0.1f * Time.deltaTime * -xVel;
@@ -69,7 +71,12 @@ public class Player : NetworkBehaviour
         {
             velocity.y = 0;
         }
+        //Move
         velocity += currentJoystick * Time.deltaTime;
+        //Max Speed
+        velocity = Vector3.Min(velocity, Vector3.one * .01f);
+        velocity = Vector3.Max(velocity, -Vector3.one * .01f);
+
         transform.position += velocity;
     }
 

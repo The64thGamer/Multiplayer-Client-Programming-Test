@@ -49,6 +49,7 @@ public class NetcodeManager : NetworkBehaviour
         {
             tickTimer = 0;
             SendJoystickServerRpc(GetJoyStickInput(), NetworkManager.Singleton.LocalClientId);
+            Debug.Log("Sent Client");
             return;
         }
         else if (IsHost && tickTimer > 1.0f / (float)ServerTickRate.Value)
@@ -63,6 +64,8 @@ public class NetcodeManager : NetworkBehaviour
                 };
             }
             SendPosClientRpc(playerPosRPCData.ToArray());
+            SendJoystickServerRpc(GetJoyStickInput(), NetworkManager.Singleton.LocalClientId);
+            Debug.Log("Sent Server");
             return;
         }
         tickTimer += Time.deltaTime;
@@ -101,10 +104,7 @@ public class NetcodeManager : NetworkBehaviour
 
     Vector2 GetJoyStickInput()
     {
-        Vector2 input = Vector2.zero;
-        input.x = Input.GetAxis("Horizontal");
-        input.y = Input.GetAxis("Vertical");
-        return input;
+        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
     public void UpdateTickrates(int server, int client)

@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3551175204249798939
 Transform:
@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 4486761891734574167}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.0196867, y: 0.07173145, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -99,9 +99,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 403244d1195c0c14b84dd864a14c95d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oldPos1: {x: 0, y: 0, z: 0}
-  oldPos2: {x: 0, y: 0, z: 0}
+  oldPos1: {x: 0, y: 0}
+  oldPos2: {x: 0, y: 0}
+  oldTime1: 0
+  oldTime2: 0
+  timeBetweenUpdates: 0
   predictionTimer: 0
+  currentJoystick: {x: 0, y: 0, z: 0}
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &2646186333642209642
 MonoBehaviour:
   m_ObjectHideFlags: 0
